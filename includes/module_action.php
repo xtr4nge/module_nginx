@@ -39,7 +39,6 @@ $action = $_GET['action'];
 $page = $_GET['page'];
 $mac =  strtoupper($_GET['mac']);
 $install = $_GET['install'];
-$port = 9999;
 
 if($service == $mod_name) {
     
@@ -55,14 +54,24 @@ if($service == $mod_name) {
             $exec = "echo '' > $mod_logs";
             exec_fruitywifi($exec);
         }
-	
+		
+		if (!file_exists("/etc/php5/fpm/pool.d/80.conf") or !file_exists("/etc/php5/fpm/pool.d/443.conf")) {
+			$exec = "cp php5-fpm/80.conf /etc/php5/fpm/pool.d/";
+			exec_fruitywifi($exec);
+			$exec = "cp php5-fpm/443.conf /etc/php5/fpm/pool.d/";
+			exec_fruitywifi($exec);
+			$exec = "$php5_fpm -y /etc/php5/fpm/pool.d/80.conf";
+			exec_fruitywifi($exec);
+			$exec = "$php5_fpm -y /etc/php5/fpm/pool.d/443.conf";
+			exec_fruitywifi($exec);
+		}
+		
 		$exec = "$bin_nginx -c /usr/share/fruitywifi/www/modules/nginx/includes/nginx.conf";
         exec_fruitywifi($exec);
 		
     } else if($action == "stop") {
 	
 		// STOP MODULE
-        		
 		$exec = "ps aux|grep -E 'nginx.+/modules/nginx/includes/nginx.conf' | grep -v grep | awk '{print $2}'";
 		exec($exec,$output);
 		

@@ -20,4 +20,5 @@ $bin_cat = "/bin/cat";
 $bin_echo = "/bin/echo";
 $bin_ln = "/bin/ln";
 $bin_killall = "/usr/bin/killall";
+$php5_fpm = "/usr/sbin/php5-fpm";
 ?>
