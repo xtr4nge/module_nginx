@@ -63,7 +63,7 @@ if($service == $mod_name) {
 	
 		// STOP MODULE
         		
-		$exec = "ps aux|grep -E 'nginx.+fruitywifi.+nginx.conf' | grep -v grep | awk '{print $2}'";
+		$exec = "ps aux|grep -E 'nginx.+/modules/nginx/includes/nginx.conf' | grep -v grep | awk '{print $2}'";
 		exec($exec,$output);
 		
 		$exec = "kill " . $output[0];
