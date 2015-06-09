@@ -7,7 +7,7 @@ $mod_logs_history="$mod_path/includes/logs/";
 $mod_logs_panel="disabled";
 $mod_panel="show";
 $mod_type="service";
-$mod_isup="ps auxww | grep -E 'nginx.+fruitywifi.+nginx.conf' | grep -v -e grep";
+$mod_isup="ps auxww | grep -E 'nginx.+/modules/nginx/includes/nginx.conf' | grep -v -e grep";
 $mod_alias="Nginx";
 # EXEC
 $bin_danger = "/usr/share/fruitywifi/bin/danger";
