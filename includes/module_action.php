@@ -32,6 +32,7 @@ if ($regex == 1) {
     regex_standard($io_action, "../msg.php", $regex_extra);
     regex_standard($_GET["mac"], "../msg.php", $regex_extra);
     regex_standard($_GET["install"], "../msg.php", $regex_extra);
+	regex_standard($_GET["php_fpm"], "../msg.php", $regex_extra);
 }
 
 $service = $_GET['service'];
@@ -39,6 +40,17 @@ $action = $_GET['action'];
 $page = $_GET['page'];
 $mac =  strtoupper($_GET['mac']);
 $install = $_GET['install'];
+$php_fpm = $_GET["php_fpm"];
+
+// SET FPM
+if ($php_fpm == "php7" or $php_fpm == "php5") {
+    $ss_mode = $service;
+    $exec = "/bin/sed -i 's/mod_nginx_fpm.*/mod_nginx_fpm = \\\"".$php_fpm."\\\";/g' ../_info_.php";
+    exec_fruitywifi($exec);
+	
+	header("Location: ../index.php");
+    exit;
+}
 
 if($service == $mod_name) {
     
@@ -55,15 +67,34 @@ if($service == $mod_name) {
             exec_fruitywifi($exec);
         }
 		
-		if (!file_exists("/etc/php5/fpm/pool.d/80.conf") or !file_exists("/etc/php5/fpm/pool.d/443.conf")) {
-			$exec = "cp php5-fpm/80.conf /etc/php5/fpm/pool.d/";
+		if ($mod_nginx_fpm == "php7") {
+			$exec = "cp vhost-php7.conf vhost/FruityWiFi-www";
 			exec_fruitywifi($exec);
-			$exec = "cp php5-fpm/443.conf /etc/php5/fpm/pool.d/";
+			
+			if (!file_exists("/etc/php/7.0/fpm/pool.d/80.conf") or !file_exists("/etc/php/7.0/fpm/pool.d/443.conf")) {
+				$exec = "cp php7-fpm/80.conf /etc/php/7.0/fpm/pool.d/";
+				exec_fruitywifi($exec);
+				$exec = "cp php7-fpm/443.conf /etc/php/7.0/fpm/pool.d/";
+				exec_fruitywifi($exec);
+				$exec = "$php7_fpm -y /etc/php/7.0/fpm/pool.d/80.conf";
+				exec_fruitywifi($exec);
+				$exec = "$php7_fpm -y /etc/php/7.0/fpm/pool.d/443.conf";
+				exec_fruitywifi($exec);
+			}
+		} else {
+			$exec = "cp vhost-php5.conf vhost/FruityWiFi-www";
 			exec_fruitywifi($exec);
-			$exec = "$php5_fpm -y /etc/php5/fpm/pool.d/80.conf";
-			exec_fruitywifi($exec);
-			$exec = "$php5_fpm -y /etc/php5/fpm/pool.d/443.conf";
-			exec_fruitywifi($exec);
+			
+			if (!file_exists("/etc/php5/fpm/pool.d/80.conf") or !file_exists("/etc/php5/fpm/pool.d/443.conf")) {
+				$exec = "cp php5-fpm/80.conf /etc/php5/fpm/pool.d/";
+				exec_fruitywifi($exec);
+				$exec = "cp php5-fpm/443.conf /etc/php5/fpm/pool.d/";
+				exec_fruitywifi($exec);
+				$exec = "$php5_fpm -y /etc/php5/fpm/pool.d/80.conf";
+				exec_fruitywifi($exec);
+				$exec = "$php5_fpm -y /etc/php5/fpm/pool.d/443.conf";
+				exec_fruitywifi($exec);
+			}
 		}
 		
 		$exec = "$bin_nginx -c /usr/share/fruitywifi/www/modules/nginx/includes/nginx.conf";

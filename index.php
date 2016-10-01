@@ -94,6 +94,19 @@ include "includes/options_config.php";
         echo "&nbsp;&nbsp;&nbsp; $mod_alias  <font color=\"red\"><b>disabled</b></font>. | <a href=\"includes/module_action.php?service=$mod_name&action=start&page=module\"><b>start</b></a>"; 
     }
     ?>
+  
+</div>
+
+<br>
+
+<div class="rounded-bottom">
+    <?
+    if ($mod_nginx_fpm == "php7") {
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FPM  [ <a href='includes/module_action.php?php_fpm=php5'>PHP5</a> | <font color='black'><b>PHP7</b></font> ]";
+    } else { 
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FPM  [ <font color='black'><b>PHP5</b></font> | <a href='includes/module_action.php?php_fpm=php7'>PHP7</a> ]"; 
+    }
+    ?>
     
 </div>
 
